@@ -55,7 +55,30 @@
                 }
             }
             DATABASES["default"]["ATOMIC_REQUESTS"] = True
-            DATABASES["default"]["CONN_MAX_AGE"] = int(os.environ.get("CONN_MAX_AGE", "60"))
+            DATABASES["default"]["CONN_MAX_AGE"] = int(
+                os.environ.get("CONN_MAX_AGE", "60"),
+            )
+
+            DJANGO_AUTH = "django.contrib.auth.password_validation."
+
+            # Password validation
+            # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
+
+            AUTH_PASSWORD_VALIDATORS = [
+                {
+                    "NAME": DJANGO_AUTH + "UserAttributeSimilarityValidator",
+                },
+                {
+                    "NAME": DJANGO_AUTH + "MinimumLengthValidator",
+                },
+                {
+                    "NAME": DJANGO_AUTH + "CommonPasswordValidator",
+                },
+                {
+                    "NAME": DJANGO_AUTH + "NumericPasswordValidator",
+                },
+            ]
+
         ```
 
     - Add LOGGING, LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL:
@@ -100,7 +123,10 @@
 
         from celery import Celery
 
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", os.environ.get("DJANGO_SETTINGS_MODULE"))  # type: ignore
+        os.environ.setdefault(
+            "DJANGO_SETTINGS_MODULE",
+            os.environ.get("DJANGO_SETTINGS_MODULE", "core.settings"),
+        )
         app = Celery("app")
         app.config_from_object("django.conf:settings", namespace="CELERY")
         app.autodiscover_tasks()

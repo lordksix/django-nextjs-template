@@ -1,0 +1,11 @@
+Dockerfile
+.docker/
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+.next
+.github/
+.env.example
+coverage/
+.swc/

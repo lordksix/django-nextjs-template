@@ -1,4 +1,4 @@
-FROM python:3.11-alpine
+FROM python:3.11-alpine AS base
 ENV PIP_NO_CACHE_DIR off
 ENV PIP_DISABLE_PIP_VERSION_CHECK on
 ENV PYTHONUNBUFFERED 1
@@ -17,10 +17,19 @@ RUN apk update && \
     rm -rf /var/cache/apk/* && \
     pip install --upgrade pip && \
     pip install -r requirements.txt --no-cache-dir
-COPY ./entrypoint.sh "$APP_HOME"
-RUN sed -i 's/\r$//g' "$APP_HOME"/entrypoint.sh
-RUN chmod +x "$APP_HOME"/entrypoint.sh
 
+FROM base AS development
+COPY ./entrypoint-dev.sh "$APP_HOME"
+RUN sed -i 's/\r$//g' "$APP_HOME"/entrypoint-dev.sh
+RUN chmod +x "$APP_HOME"/entrypoint-dev-dev.sh
 COPY . "$APP_HOME"
 USER user
 ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+
+FROM base AS production
+COPY ./entrypoint-prod.sh "$APP_HOME"
+RUN sed -i 's/\r$//g' "$APP_HOME"/entrypoint-prod.sh
+RUN chmod +x "$APP_HOME"/entrypoint-prod.sh
+COPY . "$APP_HOME"
+USER user
+ENTRYPOINT ["/usr/src/app/entrypoint-prod.sh"]

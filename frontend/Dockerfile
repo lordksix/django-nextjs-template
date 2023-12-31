@@ -3,19 +3,18 @@ ENV APP_HOME=/app
 RUN mkdir "$APP_HOME"
 RUN apk add --no-cache g++ make py3-pip libc6-compat
 WORKDIR "$APP_HOME"
-COPY package-lock.json "$APP_HOME"
+COPY ./frontend/package-lock.json "$APP_HOME"
 EXPOSE 3000
 
 FROM base AS builder
 WORKDIR "$APP_HOME"
 ENV NODE_ENV=production
-COPY package-production.json "$APP_HOME"/package.json
+COPY ./frontend/package-production.json "$APP_HOME"/package.json
 RUN npm ci
-COPY . "$APP_HOME"
-COPY package.json "$APP_HOME"
+COPY ./frontend/. "$APP_HOME"
+COPY ./frontend/package.json "$APP_HOME"
 RUN npm run build
 RUN npm prune --production
-
 FROM base AS production
 WORKDIR "$APP_HOME"
 
@@ -31,9 +30,9 @@ COPY --from=builder "$APP_HOME"/public ./public
 
 CMD npm start
 
-FROM base AS dev
-COPY package.json "$APP_HOME"
+FROM base AS development
+COPY ./frontend/package.json "$APP_HOME"
 ENV NODE_ENV=development
 RUN npm install
-COPY . "$APP_HOME"
+COPY ./frontend/. "$APP_HOME"
 CMD npm run dev

@@ -1,6 +1,11 @@
 FROM nginx:stable-alpine
 
-RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/conf.d
+RUN mkdir -p /etc/nginx/conf.d/
+RUN rm /etc/nginx/conf.d/*
+COPY ./nginx/default.conf /etc/nginx/conf.d
 
 EXPOSE 80
+EXPOSE 443
+
+CMD ["nginx", "-g", "daemon off;"]
+

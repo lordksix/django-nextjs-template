@@ -14,7 +14,7 @@ services:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_HOST=db
+      - POSTGRES_HOST=192.168.0.2
       - POSTGRES_PORT=5432
       - DJANGO_SECRET_KEY=dj4ng0_sup3r_s3cr3t_k3y
       - DJANGO_DEBUG=1
@@ -27,6 +27,9 @@ services:
       - redis
       - backend
       - rabbitmq
+    networks:
+      app_net:
+        ipv4_address: 192.168.0.7
 
   backend:
     container_name: django-nextjs-backend
@@ -45,7 +48,7 @@ services:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_HOST=db
+      - POSTGRES_HOST=192.168.0.2
       - POSTGRES_PORT=5432
       - DJANGO_SECRET_KEY=dj4ng0_sup3r_s3cr3t_k3y
       - DJANGO_DEBUG=1
@@ -55,6 +58,9 @@ services:
       - redis
       - db
       - rabbitmq
+    networks:
+      app_net:
+        ipv4_address: 192.168.0.8
 
   frontend:
     container_name: django-nextjs-frontend
@@ -70,6 +76,9 @@ services:
         - /app/.next
     ports:
       - "3000:3000"
+    networks:
+      app_net:
+        ipv4_address: 192.168.0.9
 
 volumes:
   postgres_data:

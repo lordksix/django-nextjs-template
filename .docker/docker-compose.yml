@@ -2,10 +2,10 @@ version: "3.9"
 
 services:
   db:
-    container_name: django-template-database
+    container_name: django-nextjs-database
     image: postgres:latest
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - django-nextjs-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
@@ -17,7 +17,7 @@ services:
         ipv4_address: 192.168.0.2
 
   redis:
-    container_name: django-template-redis
+    container_name: django-nextjs-redis
     image: redis:7
     networks:
       app_net:
@@ -26,7 +26,7 @@ services:
   rabbitmq:
     image: rabbitmq:management
     restart: always
-    container_name: django-template-rabbitmq
+    container_name: django-nextjs-rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
@@ -35,7 +35,7 @@ services:
         ipv4_address: 192.168.0.4
 
   flower:
-    container_name: django-template-flowerui
+    container_name: django-nextjs-flowerui
     image: mher/flower
     restart: always
     ports:
@@ -55,7 +55,7 @@ services:
         ipv4_address: 192.168.0.6
 
   pgadmin:
-    container_name: django-template-pgadmin
+    container_name: django-nextjs-pgadmin
     image: dpage/pgadmin4
     restart: always
     environment:
@@ -65,14 +65,14 @@ services:
     ports:
       - "5050:80"
     volumes:
-      - django-template-pgadmin-data:/var/lib/pgadmin
+      - django-nextjs-pgadmin-data:/var/lib/pgadmin
     networks:
       app_net:
         ipv4_address: 192.168.0.3
 
 volumes:
-  postgres_data:
-  django-template-pgadmin-data:
+  django-nextjs-data:
+  django-nextjs-pgadmin-data:
 
 networks:
   app_net:

@@ -79,7 +79,7 @@ services:
       target: production
       dockerfile: ./frontend/Dockerfile
     restart: always
-    image: nextjs_container
+    image: nextjs-container
     ports:
       - "3000:3000"
     depends_on:
@@ -109,5 +109,5 @@ services:
         ipv4_address: 192.168.0.10
 
 volumes:
-  postgres_data:
+  django-nextjs-data:
 
